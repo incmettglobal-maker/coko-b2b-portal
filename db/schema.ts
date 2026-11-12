@@ -39,10 +39,13 @@ export const dealerAccounts = pgTable("dealer_accounts", {
   // Matches Supabase Auth's user id (auth.users.id) — not a foreign key across schemas,
   // just the convention; enforce the link in application code / RLS policy.
   authUserId: uuid("auth_user_id").notNull().unique(),
-  phone: text("phone").notNull().unique(),
+  // Login identity — Supabase Auth email OTP (magic link / one-time code). See CLAUDE.md
+  // auth model: switched from phone+OTP to avoid requiring a paid SMS provider.
+  email: text("email").notNull().unique(),
   businessName: text("business_name").notNull(),
   contactName: text("contact_name").notNull(),
-  email: text("email"),
+  // Optional business contact number — no longer used for login, kept for ops/dispatch.
+  phone: text("phone"),
   city: text("city"),
   state: text("state"),
   gstin: text("gstin"),

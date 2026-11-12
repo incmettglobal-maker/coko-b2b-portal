@@ -50,10 +50,15 @@ channel eligibility is decided once, in Zoho, not duplicated here.
 
 ## Auth model
 
-Supabase Auth, phone number + OTP. Login works for anyone; **pricing and ordering are gated
-separately** by an `is_approved` flag on the buyer's profile row, which is only set true once
-their linked Zoho CRM Account/Lead shows portal access approved. Never show a price or allow
-a cart submission to an unapproved account, even if logged in.
+Supabase Auth, email + OTP (magic link / one-time code) — chosen over phone+OTP because it's
+free and built in; phone OTP needs a paid SMS provider (Twilio/MSG91), which isn't worth it at
+launch volume. `dealer_accounts.phone` still exists as an optional business contact field but
+is no longer used for login.
+
+Login works for anyone; **pricing and ordering are gated separately** by `dealer_accounts.status`
+(`pending` / `approved` / `rejected` / `suspended`), which only moves to `approved` once the
+buyer's linked Zoho CRM Account/Lead shows portal access approved. Never show a price or allow
+a cart submission to an account whose status isn't `approved`, even if logged in.
 
 ## Conventions
 
